@@ -1,5 +1,5 @@
 const api_chat = require("tmi.js");
-//La API de sonido necesita un reproductor de sonido CLI 
+//La API de sonido necesita un reproductor de sonido CLI
 // (en este caso uso MPG123, tendrás que descargarlo via apt o setear una PATH para Windows)
 //Si no lo vas a usar coméntalo
 const api_sound = require('play-sound-v12') (opts = {player: 'mpg123'});
@@ -20,7 +20,7 @@ const opciones = {
 } ;
 
 //handler será la constante para poder enviar mensajes (con el método say) y conectarse al chat
-const handler = new api_chat.client(opciones); 
+const handler = new api_chat.client(opciones);
 
 //Funciones para gestionar los eventos
 handler.on('connected', notifyInitChat);
@@ -54,7 +54,7 @@ function handleMessage(target,context,message,self){
 
         //Puse un par de funciones de ejemplo.
         /*'target' es el nombre del canal al que va a leer/escribir mensajes
-        'context' es la info del usuario, en este caso 'username' devuelve el nick (no estilizado) de este*/ 
+        'context' es la info del usuario, en este caso 'username' devuelve el nick (no estilizado) de este*/
         switch(commandName.toLowerCase()){
             case "hola": salute(target, context.username); break;
             case "!dado": rollDice(target, context.username); break;
@@ -84,6 +84,20 @@ function rollDice(channel, user){
     const sides = 6;
     var number = randomizeNumber(sides);
     handler.say(channel, user + ", has sacado un " + number + " en el dado");
+}
+
+function coinFlip(channel, user){
+  const face = 2;
+  var face = randomizeNumber(face);
+  switch (face) {
+    case 1:
+      handler.say(channel, user + ", has sacado cara");
+    break;
+    case 2:
+      handler.say(channel, user + ", has sacado cruz");
+    break;
+
+  }
 }
 
 //Funciones de sonido. Si no vas a usar sonidos, comenta las funciones
