@@ -101,6 +101,7 @@ function coinFlip(channel, user){
   }
 }
 
+
 //Funciones de sonido. Si no vas a usar sonidos, comenta las funciones
 
 function notifyAudioError(err){
