@@ -58,6 +58,7 @@ function handleMessage(target,context,message,self){
         switch(commandName.toLowerCase()){
             case "hola": salute(target, context.username); break;
             case "!dado": rollDice(target, context.username); break;
+            case "!coinflip": coinFlip(target,context.username); break;
         }
 
     }
@@ -87,8 +88,8 @@ function rollDice(channel, user){
 }
 
 function coinFlip(channel, user){
-  const face = 2;
-  var face = randomizeNumber(face);
+  const faces = 2;
+  var face = randomizeNumber(faces);
   switch (face) {
     case 1:
       handler.say(channel, user + ", has sacado cara");
