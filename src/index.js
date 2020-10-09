@@ -119,7 +119,7 @@ function calcLove(channel, user, lover){
 }
 
 function tellCommands(channel){
-    handler.say(channel,"/me Los comandos disponibles son: ")
+    handler.say(channel,"/me Los comandos disponibles son: Hola, !dollars, !dado, !coinflip, !amor <Amante>, !duelo <otro> <amante>, !examen <asignatura> ");
 }
 
 function calcExamen(channel,user,subject){
