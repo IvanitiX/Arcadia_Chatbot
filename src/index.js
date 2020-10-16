@@ -66,6 +66,7 @@ function handleMessage(target,context,message,self){
         if(commandName.toLowerCase().includes("!amor")) calcLove(target, context.username, commandName.split(" ")[1]);
         if(commandName.toLowerCase().includes("!duelo")) calcLoveDuel(target, context.username, commandName.split(" ")[1],commandName.split(" ")[2]);
         if(commandName.toLowerCase().includes("!examen")) calcExamen(target, context.username, commandName.split(" ")[1]) ;
+        if(commandName.toLowerCase().includes("!ruleta")) playRoulette(target, context.username, commandName.split(" ")[1]) ;
 
 
     }
@@ -107,6 +108,18 @@ function coinFlip(channel, user){
   }
 }
 
+function playRoulette(channel,user,number){
+  const max_number = 10;
+  var num_winner = randomizeNumber(max_number);
+  if(number <= 0 || number > 10){
+    handler.say(channel, user + " debes de apostar a un número entre el 1 y el 10");
+  }else if(num_winner == number){
+    handler.say(channel, user + " la ruleta ha sacado tu número!!! :) :)");
+  }else{
+    handler.say(channel, user + ", tu número no ha salido en esta ronda :(");
+  }
+}
+
 function tellDollars(channel){
     handler.say(channel, "/me Dollars, chavales, DOOOOLARSS!");
 }
@@ -140,7 +153,7 @@ function calcLoveDuel(channel,user,enemy,lover){
     }
 
     if(loveProbUser > loveProbEnemy){
-        winner = user; 
+        winner = user;
         loveProbWinner = loveProbUser ;
         loser = enemy;
         loveProbLoser = loveProbEnemy ;
@@ -154,7 +167,7 @@ function calcLoveDuel(channel,user,enemy,lover){
 
     handler.say(channel, "/me " + winner + " está más enamorado de " + lover + " que " + loser + ", ¡así que cuidadito! (" + loveProbWinner/10.0  + "/" + loveProbLoser/10.0 + ")");
 
-    
+
 }
 
 //Funciones de sonido. Si no vas a usar sonidos, comenta las funciones
