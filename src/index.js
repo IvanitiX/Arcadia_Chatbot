@@ -111,9 +111,8 @@ function coinFlip(channel, user){
 function playRoulette(channel,user,number){
   const max_number = 10;
   var num_winner = randomizeNumber(max_number);
-  if(number =< 0 || number > 10){
+  if(number <= 0 || number > 10){
     handler.say(channel, user + " debes de apostar a un número entre el 1 y el 10");
-    break;
   }else if(num_winner == number){
     handler.say(channel, user + " la ruleta ha sacado tu número!!! :) :)");
   }else{
