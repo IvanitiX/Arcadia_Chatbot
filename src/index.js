@@ -41,7 +41,7 @@ function connectToTwitch(){
 }
 
 function notifyInitChat(address,port){
-    console.log('Hola, aquí Arcadia. Estoy conectada a ' + address + ':' + port);
+    console.log('Hola, aquí OpenArcadia. Estoy conectada a ' + address + ':' + port);
 }
 
 function handleMessage(target,context,message,self){
@@ -59,7 +59,14 @@ function handleMessage(target,context,message,self){
             case "hola": salute(target, context.username); break;
             case "!dado": rollDice(target, context.username); break;
             case "!coinflip": coinFlip(target,context.username); break;
+            case "!dollars": tellDollars(target);break;
+            case "!comandos" : tellCommands(target) ; break;
         }
+
+        if(commandName.toLowerCase().includes("!amor")) calcLove(target, context.username, commandName.split(" ")[1]);
+        if(commandName.toLowerCase().includes("!duelo")) calcLoveDuel(target, context.username, commandName.split(" ")[1],commandName.split(" ")[2]);
+        if(commandName.toLowerCase().includes("!examen")) calcExamen(target, context.username, commandName.split(" ")[1]) ;
+
 
     }
 
@@ -78,7 +85,6 @@ function randomizeNumberArray(max){
 
 function salute(channel, user){
     handler.say(channel,"Hola " + user + " , ¿qué tal?");
-    //playAudio("Hola.mp3");
 }
 
 function rollDice(channel, user){
@@ -101,6 +107,55 @@ function coinFlip(channel, user){
   }
 }
 
+function tellDollars(channel){
+    handler.say(channel, "/me Dollars, chavales, DOOOOLARSS!");
+}
+
+function calcLove(channel, user, lover){
+    if (lover === undefined) lover = "la Nada";
+    const loveMax = 100;
+    const loveProb = randomizeNumber(loveMax);
+    handler.say(channel, "/me Hay un " + loveProb + "% de que se enamoren " + user + " y " + lover);
+}
+
+function tellCommands(channel){
+    handler.say(channel,"/me Los comandos disponibles son: Hola, !dollars, !dado, !coinflip, !amor <Amante>, !duelo <otro> <amante>, !examen <asignatura> ");
+}
+
+function calcExamen(channel,user,subject){
+    const notaMax = 11;
+    var nota = randomizeNumber(notaMax) ;
+
+    handler.say(channel, "/me " + user + ", vas a sacar un " + nota + " en el examen de " + subject);
+}
+
+function calcLoveDuel(channel,user,enemy,lover){
+    if(lover === undefined) lover = "la Nada";
+    if (enemy === undefined) enemy = "El que no es " + user ;
+    const loveMax = 100;
+    var love, winner, loser, loveProbUser = 0, loveProbEnemy = 0, loveProbWinner, loveProbLoser;
+    for(let i=0; i < 10 ; i++){
+        loveProbUser += randomizeNumber(loveMax);
+        loveProbEnemy += randomizeNumber(loveMax);
+    }
+
+    if(loveProbUser > loveProbEnemy){
+        winner = user; 
+        loveProbWinner = loveProbUser ;
+        loser = enemy;
+        loveProbLoser = loveProbEnemy ;
+    }
+    else{
+        winner = enemy;
+        loveProbWinner = loveProbEnemy ;
+        loser = user ;
+        loveProbLoser = loveProbUser ;
+    }
+
+    handler.say(channel, "/me " + winner + " está más enamorado de " + lover + " que " + loser + ", ¡así que cuidadito! (" + loveProbWinner/10.0  + "/" + loveProbLoser/10.0 + ")");
+
+    
+}
 
 //Funciones de sonido. Si no vas a usar sonidos, comenta las funciones
 
