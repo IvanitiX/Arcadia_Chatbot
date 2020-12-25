@@ -12,11 +12,11 @@ const opciones = {
     },
     identity: {
         //Pon el usuario y OAuth (consíguelo en https://twitchapps.com/tmi/) de tu cuenta bot
-        username: "notifs_arcadia",
-        password: "oauth:lfujhuoaq4g65zr1k3pc2rpe03prs8"
+        username: "",
+        password: ""
     },
     //Pon aquí el nombre de tu canal de Twitch
-    channels: ["IvanitiX", "AvicenaDraws"]
+    channels: []
 } ;
 
 //handler será la constante para poder enviar mensajes (con el método say) y conectarse al chat
