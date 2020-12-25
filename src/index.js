@@ -12,11 +12,11 @@ const opciones = {
     },
     identity: {
         //Pon el usuario y OAuth (consíguelo en https://twitchapps.com/tmi/) de tu cuenta bot
-        username: "",
-        password: ""
+        username: "notifs_arcadia",
+        password: "oauth:lfujhuoaq4g65zr1k3pc2rpe03prs8"
     },
     //Pon aquí el nombre de tu canal de Twitch
-    channels: [""]
+    channels: ["IvanitiX", "AvicenaDraws"]
 } ;
 
 //handler será la constante para poder enviar mensajes (con el método say) y conectarse al chat
@@ -49,23 +49,23 @@ function handleMessage(target,context,message,self){
     if (self) return 0;
     else{
         //En consola sale quién habla y el mensaje que ha escrito
-        console.log(context.username + ' $> ' +  message);
+        console.log(context["display-name"] + ' $> ' +  message);
         var commandName = message.trim();
 
         //Puse un par de funciones de ejemplo.
         /*'target' es el nombre del canal al que va a leer/escribir mensajes
         'context' es la info del usuario, en este caso 'username' devuelve el nick (no estilizado) de este*/
         switch(commandName.toLowerCase()){
-            case "hola": salute(target, context.username); break;
-            case "!dado": rollDice(target, context.username); break;
-            case "!coinflip": coinFlip(target,context.username); break;
+            case "hola": salute(target, context["display-name"]); break;
+            case "!dado": rollDice(target, context["display-name"]); break;
+            case "!coinflip": coinFlip(target,context["display-name"]); break;
             case "!dollars": tellDollars(target);break;
             case "!comandos" : tellCommands(target) ; break;
         }
 
-        if(commandName.toLowerCase().includes("!amor")) calcLove(target, context.username, commandName.split(" ")[1]);
-        if(commandName.toLowerCase().includes("!duelo")) calcLoveDuel(target, context.username, commandName.split(" ")[1],commandName.split(" ")[2]);
-        if(commandName.toLowerCase().includes("!examen")) calcExamen(target, context.username, commandName.split(" ")[1]) ;
+        if(commandName.toLowerCase().includes("!amor")) calcLove(target, context["display-name"], commandName.split(" ")[1]);
+        if(commandName.toLowerCase().includes("!duelo")) calcLoveDuel(target, context["display-name"], commandName.split(" ")[1],commandName.split(" ")[2]);
+        if(commandName.toLowerCase().includes("!examen")) calcExamen(target, context["display-name"], commandName.split(" ")[1]) ;
 
 
     }
