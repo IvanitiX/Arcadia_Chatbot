@@ -1,0 +1,47 @@
+html,body{
+    padding: 0;
+    margin: 0;
+    font-family: 'Rubik';
+}
+
+/*Header*/
+header{
+    background-color: rgb(35, 192, 82);
+    color: white ;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+nav{
+    padding-left: 1%;
+}
+
+/*Central part*/
+.mainframe{
+    display: grid;
+    grid-template-columns: 2fr 8fr; 
+}
+
+section{
+    min-height: 89vh;
+    max-height: 89vh;
+    overflow-y: scroll;
+}
+
+aside{
+    background-color: rgb(37, 37, 37);
+    color: white;
+}
+
+/*Footer*/
+footer{
+    background-color: rgb(24, 24, 24);
+    color: white ;
+    text-align: center ;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    margin-bottom: 0px;
+}
