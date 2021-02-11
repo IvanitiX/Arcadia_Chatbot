@@ -27,10 +27,12 @@ var client = new tmi.client({ // A client.js client
 });
 
 var twitchEmotes = {
+			//JTVNW is the CDN server where Twitch Global/Channel Emotes are extracted
 			urlTemplate: 'http://static-cdn.jtvnw.net/emoticons/v1/{{id}}/{{image}}',
 			scales: { 1: '1.0', 2: '2.0', 3: '3.0' }
 		},
 	bttvEmotes = {
+			//This is the CDN server where BetterTTV Global/Shared/Channel Emotes are extracted
 			urlTemplate: 'https://cdn.betterttv.net/emote/{{id}}/{{image}}',
 			scales: { 1: '1x', 2: '2x', 3: '3x' },
 			bots: [], // Bots listed by BTTV for a channel { name: 'name', channel: 'channel' }
@@ -42,10 +44,12 @@ var twitchEmotes = {
 	chat = document.getElementById('chat_section'),
 	emoteScale = 3;
 
+	//A function to remove the '#' from the channel
 	function dehash(channel) {
 		return channel.replace(/^#/, '');
 	}
 	
+	//A function to put the first letter capitalized
 	function capitalize(n) {
 		return n[0].toUpperCase() +  n.substr(1);
 	}
@@ -72,7 +76,7 @@ function htmlEntities(html) { // Custom HTML entity encoder using an array
 
 
 function inspectGetParam(){
-	// If GET flag 'see' isn't in the web, use the array to put default channels
+	// If GET flag 'see' isn't defined in the web, use the array to put default channels (for example, ibai)
 	var channel_seq = location.search.split("?see=")[1] ? location.search.split('see')[1].split('=')[1] : ['ibai'] ;
 	console.log(channel_seq);
 	if(!channel_seq.isArray){
@@ -82,6 +86,8 @@ function inspectGetParam(){
 	return channel_seq;
 }	
 
+
+//Alca's function to append Badges to the user (broadcaster, admin, developers, mods...).
 function badges(chan, user, isBot) {
 	
 	function createBadge(name) {
@@ -111,7 +117,7 @@ function badges(chan, user, isBot) {
 	return chatBadges;
 }
 
-function get(uri, data, headers, method, cb, json) { // Simplification of jQuery Ajax for my use
+function get(uri, data, headers, method, cb, json) { // Simplification of jQuery Ajax for my use, created by Alca
 	return $.ajax({
 			url:		uri || '',			data:		data || {},
 			headers:	headers || {},		type:		method || 'GET',
@@ -150,7 +156,8 @@ function do_merge(roles) { // http://stackoverflow.com/a/21196265
 	return _.extend.apply(_, args);
 }
 
-function formatEmotes(text, emotes, channel) { // Format the emotes into the text
+// Alca: Format the emotes into the text.
+function formatEmotes(text, emotes, channel) { 
 	console.log(bttvEmotes.emotes);
 	emotes = _.extend(emotes || {}, do_merge(bttvEmotes.emoteCodeList.map(function(n) { // Add BTTV emotes
 			var indices = getIndicesOf(n, text, true),
@@ -198,7 +205,7 @@ function formatEmotes(text, emotes, channel) { // Format the emotes into the tex
     return htmlEntities(splitText).join(''); // Encode non-images
 }
 
-function handleChat(channel, user, message, self) { // Handle le chat
+function handleChat(channel, user, message, self) { // Handle the chat. 
 	
 	var chan = dehash(channel),
 		name = user.username,
@@ -222,7 +229,7 @@ function handleChat(channel, user, message, self) { // Handle le chat
 		}
 	}
 	
-	chatLine.className = 'chat-line';
+	chatLine.className = 'chat-line puff-in-right';
 	chatLine.dataset.username = name;
 	chatLine.dataset.channel = channel;
 	
@@ -241,7 +248,7 @@ function handleChat(channel, user, message, self) { // Handle le chat
 	
 	chatMessage.className = 'chat-message';
 	
-	chatMessage.style.color = color;
+	//chatMessage.style.color = color;
 	chatMessage.innerHTML = showEmotes ? formatEmotes(message, user.emotes, channel) : htmlEntities(message);
 	
 	if(client.opts.channels.length > 1 && showChannel) chatLine.appendChild(chatChannel);
@@ -263,14 +270,11 @@ function handleChat(channel, user, message, self) { // Handle le chat
 		for(var i in oldMessages) oldMessages[i].remove();
 	}
 
-	document.getElementById('chat_section').scrollTop = document.getElementById('chat_section').scrollHeight ;
+	window.scrollTo(0,document.body.scrollHeight);
 	
 }
 
-function testMessage(channel, user, message, self) { // Throw away when done
-	handleChat(channel || client.opts.channels[0], user || { 'display-name': 'Alca', emotes: null }, message || '(chompy) bttvNice domeHey domeLit splinCreep', self || false);
-}
-
+//Function to list all BetterTTV Emotes from Global, Shared and Channel.
 function mergeBTTVEmotes(data, channel) {
 	console.log('Got BTTV emotes for ' + channel);
 	console.log(data);
@@ -311,7 +315,7 @@ function mergeBTTVEmotes(data, channel) {
 function chatNotice(information, noticeFadeDelay, level, additionalClasses) {
 	var ele = document.createElement('div');
 	
-	ele.className = 'chat-line chat-notice';
+	ele.className = 'chat-line chat-notice puff-in-right';
 	ele.innerHTML = information;
 	
 	if(additionalClasses !== undefined) {
@@ -338,6 +342,7 @@ function chatNotice(information, noticeFadeDelay, level, additionalClasses) {
 
 var recentTimeouts = {};
 
+//Messages when a user is timed out
 function timeout(channel, username) {
 	if(!doTimeouts) return false;
 	if(!recentTimeouts.hasOwnProperty(channel)) {
@@ -356,6 +361,8 @@ function timeout(channel, username) {
 		}
 	}
 }
+
+//Clears the chat in case a mod clears the chat in the Twitch Chat
 function clearChat(channel) {
 	if(!doChatClears) return false;
 	var toHide = document.querySelectorAll('.chat-line[data-channel="' + channel + '"]');
@@ -367,6 +374,8 @@ function clearChat(channel) {
 	}
 	chatNotice('Chat was cleared in ' + capitalize(dehash(channel)), 1000, 1, 'chat-delete-clear')
 }
+
+//Messages if a channel is hosting somebody and retrieves information
 function hosting(channel, target, viewers, unhost) {
 	if(!showHosting) return false;
 	if(viewers == '-') viewers = 0;
@@ -381,6 +390,7 @@ function hosting(channel, target, viewers, unhost) {
 	}
 }
 
+//Some listeners and calls to functions to handle the listeners
 client.addListener('message', handleChat);
 client.addListener('timeout', timeout);
 client.addListener('clearchat', clearChat);
@@ -424,19 +434,13 @@ client.addListener('crash', function () {
 		chatNotice('Crashed', 10000, 4, 'chat-crash');
 	});
 
-
+//Something similar to "main" function
 $(document).ready(function(e) {
-		
-		console.log('%cThere\'s a function called \'testMessage\' that you can use to manually input messages', 'color:orange;');
 		
 		
 		
 		client.on('connected', function() { // On connect
-					testMessage(null, null, 'Open the console!');
-					testMessage();
-					testMessage('splinxes', null, '(chompy) bttvNice domeHey domeLit splinCreep');
 					bttvEmotes.allowEmotesAnyChannel = true;
-					testMessage('splinxes', null, '(chompy) bttvNice domeHey domeLit splinCreep');
 				});
 		
 		
@@ -452,7 +456,7 @@ $(document).ready(function(e) {
 				}, false)];
 
 				
-
+				//Extracts using Twitch's ClientID the ID of a user and then gets the channel emote list to merge with mergeBTTVEmotes()
 				function addAsyncCall(channel) {
 					asyncCalls.push(get('https://api.twitch.tv/kraken/users?login=' + channel, {}, { Accept: 'application/vnd.twitchtv.v5+json', 'Client-ID': twitch_clientID  }, 'GET', function(data) {
 						asyncCalls.push(get('https://api.betterttv.net/3/cached/users/twitch/' + data.users[0]._id, {}, { Accept: 'application/json' }, 'GET', function(data) {
