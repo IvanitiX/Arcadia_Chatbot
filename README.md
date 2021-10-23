@@ -3,7 +3,7 @@
 Un bot simple y customizable para Twitch. Una de sus funcionalidades es enviar mensajes graciosos por el chat, aparte de soportar eventos aleatorios como tiradas de dados.
 
 ## ¿Y como lo uso?
-Para ello requerirás usar `node` y `npm`, bien descargándolo desde Windows o con `sudo apt/yum/... node npm`
+Para ello requerirás usar `node` y `npm`, bien descargándolo desde Windows o con `sudo apt/yum/... node npm`. También se puede descargar una versión específica usando [nvm](https://github.com/nvm-sh/nvm) o construyendo tu propia versón de node en tu máquina.
 
 > Para usar el audio necesitarás una carpeta de audios y un reproductor de música desde consola. El que mejor me ha ido es `mpg123`. Para *Linux*, usad el gestor de paquetes; y para *Windows*, descargadlo de la página y setead la carpeta en el `PATH`.
 
