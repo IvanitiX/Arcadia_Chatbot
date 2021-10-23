@@ -1,0 +1,31 @@
+
+  
+name: "Linters"
+
+on:
+  push:
+    paths:
+      - 'src/**.js'
+      - '.github/workflows/lint.yml'
+
+  pull_request:
+    paths:
+      - 'src/**.js'
+      - '.github/workflows/lint.yml'
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node LTS
+      uses: actions/setup-node@v2
+      with:
+        node-version: 'lts/*'
+    - name: Install dependencies
+      run: |
+        npm install
+    - name: Check syntax
+      run: |
+        npm run lint
